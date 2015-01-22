@@ -1,0 +1,51 @@
+players 
+   stats needed
+      	  +/-
+	  PPG
+	  APG
+	  RPG
+	  MPG
+	  stats against team last 5 times played 
+	  
+teams
+	stats needed
+		points allowed 
+		defense against individual positions
+		
+
+get players that will have favorable matchup
+
+get player 
+		w/ highest PER, 
+		scored at least 20 pts last 3 times played team theyre facing
+		
+		team theyre facing has bad defense
+
+		havent scored below 20 fanduel pts in last 3 games
+
+
+v1
+enter player to get info
+
+
+v2
+list of players playing that night
+
+v3
+maybe later add check salary, will fit in salary, auto create team
+
+
+
+
+Algorithm:
+Get player input
+
+Check team list for player to find team
+#dict with team keys and list of players as values
+
+once have team, go to team stats website
+	find player on page
+		get appropriate info from page
+		store that info in a list 
+		use player as key, list as value in another dict
+		
