@@ -120,11 +120,14 @@ for node in tree.findAll(attrs={'class': re.compile(r".*\oddrow\b.*")}):
 team_Data = {}
 
 for o in odd:
-    p = o.find('a').contents
-    team_Data[p] = 'null'
-    #print o.findAll('td')
-    if (w or w.upper() in p):
-        print p
+    #p = o.find('a').contents[0]
+    data = o.find(attrs=
+    )
+    #for d in data:
+        #print d.text
+    cityNames = o.findAll('td')[1].text
+    if (w or w.upper() in cityNames):
+        print data
 
 
 
