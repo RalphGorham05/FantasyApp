@@ -1,11 +1,11 @@
-import bs4
+from bs4 import BeautifulSoup
 import requests
 from multiprocessing import Pool
 import multiprocessing
 import threading
 import time
 import re
-
+from mechanize import Browser
 
 pl = raw_input('Enter player name: ')
 
@@ -88,7 +88,7 @@ def get_Team(player,divs):
     for division in divs:
         for team in division:
             t = requests.get(team)
-            soup = bs4.BeautifulSoup(t.text)
+            soup = BeautifulSoup(t.text)
             link = soup.select('td.sortcell')
             for a in link:
                 #print a.find('a')['href']
@@ -98,37 +98,70 @@ def get_Team(player,divs):
     return f
 
 start = time.clock()
-w = get_Team(pl,nba);
-print w
+#w = get_Team(pl,nba);
+#print w
 end = time.clock()
 #print end - start
 
 
 
 u = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-up = requests.get(u)
-#usoup = bs4.BeautifulSoup(up.text)
-#ul = usoup.select('table.tablehead')
+mech = Browser()
+page = mech.open(u)
+html = page.read()
+msoup = BeautifulSoup(html)
+table = msoup.find("table")
+
+
+st = []
+rows = table.findChildren('tr')[2:]
+for row in rows:
+     cells = row.findChildren('td')
+     for cell in cells:
+         value = cell.text
+         st.append(value)
+         #print "The value in this cell is %s" % value
+print st[:12]
+
+'''
+for row in table.findAll('tr')[2:]:
+    col = row.findAll('td')
+    tRank = col[0].text
+    tCities = col[1].text
+    tPace = col[2].text
+    tAsts = col[3].text
+    tRebR = col[7].text
+    tOff = col[10].text
+    tDef = col[11].text
+
+    tStats = (tRank, tCities, tPace, tAsts, tRebR, tOff, tDef)
+
+    print "|".join(tStats)
+    
+ '''   
+
+'''
 odd = []
 even = []
-tree = bs4.BeautifulSoup(up.text)
+tree = BeautifulSoup(up.text)
+
 for node in tree.findAll(attrs={'class': re.compile(r".*\evenrow\b.*")}):
     even.append(node)
-for node in tree.findAll(attrs={'class': re.compile(r".*\oddrow\b.*")}):
+for node in tree.findAll(attrs={'tr': re.compile(r".*\oddrow\b.*")}):
     odd.append(node)
 
 team_Data = {}
 
 for o in odd:
     #p = o.find('a').contents[0]
-    data = o.find(attrs=
-    )
+    data = o.find('a')
+    
     #for d in data:
         #print d.text
     cityNames = o.findAll('td')[1].text
     if (w or w.upper() in cityNames):
         print data
-
+'''
 
 
 

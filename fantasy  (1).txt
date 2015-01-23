@@ -49,3 +49,5 @@ once have team, go to team stats website
 		store that info in a list 
 		use player as key, list as value in another dict
 		
+video about scraping
+https://www.youtube.com/watch?v=52wxGESwQSA
