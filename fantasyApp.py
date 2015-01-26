@@ -75,8 +75,8 @@ nba = [atlantic, central, se, nw, sw, pacific]
 
 
 
-def team_Name(t):
-    teamString = t.split('/')
+def team_Name(e):
+    teamString = e.split('/')
     lastWord = len(teamString) - 1
     nameSeparated = teamString[lastWord].split('-')
     city = nameSeparated[0]
@@ -84,21 +84,25 @@ def team_Name(t):
     return city
 
 #check to find team
-def get_Team(player,divs):
+
+def get_Team(player, divs):
     for division in divs:
         for team in division:
-            t = requests.get(team)
-            soup = BeautifulSoup(t.text)
-            link = soup.select('td.sortcell')
-            for a in link:
-                #print a.find('a')['href']
+            playerUrl = requests.get(team)
+            soup = BeautifulSoup(playerUrl.text)
+            playerNames = soup.select('td.sortcell')
+            print playerNames
+
+            for a in playerNames:
+
                 if (player in a.find('a').contents[0]):
-                    f = team_Name(team)
-                    
-    return f
+                    tName = team_Name(team)
+                    print tName
+
+    return tName
 
 start = time.clock()
-#w = get_Team(pl,nba);
+get_Team(pl, nba)
 #print w
 end = time.clock()
 #print end - start
@@ -112,7 +116,7 @@ html = page.read()
 msoup = BeautifulSoup(html)
 table = msoup.find("table")
 
-
+'''
 st = []
 rows = table.findChildren('tr')[2:]
 for row in rows:
@@ -121,7 +125,14 @@ for row in rows:
          value = cell.text
          st.append(value)
          #print "The value in this cell is %s" % value
-print st[:12]
+
+#for s in st:
+    #print str(s)
+#print st.index('Utah')
+#print st[:12]
+
+
+'''
 
 '''
 for row in table.findAll('tr')[2:]:
