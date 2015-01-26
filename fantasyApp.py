@@ -87,19 +87,24 @@ def team_Name(t):
 def get_Team(player,divs):
     for division in divs:
         for team in division:
-            t = requests.get(team)
-            soup = BeautifulSoup(t.text)
-            link = soup.select('td.sortcell')
-            for a in link:
-                #print a.find('a')['href']
-                if (player in a.find('a').contents[0]):
+            browser = Browser()
+            page = browser.open(team)
+            html = page.read()
+            code = BeautifulSoup(html)
+            table = code.find('table')
+
+            rows = table.findChildren('tr')[2:]
+            for row in rows:
+                cells = row.findChildren('td')
+                name = cells[1].text
+                if player == name:
                     f = team_Name(team)
                     
     return f
 
 start = time.clock()
-#w = get_Team(pl,nba);
-#print w
+w = get_Team(pl,nba);
+print w
 end = time.clock()
 #print end - start
 
@@ -109,8 +114,8 @@ u = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
 mech = Browser()
 page = mech.open(u)
 html = page.read()
-msoup = BeautifulSoup(html)
-table = msoup.find("table")
+soup = BeautifulSoup(html)
+table = soup.find("table")
 
 
 st = []
