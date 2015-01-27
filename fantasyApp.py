@@ -86,74 +86,59 @@ def team_Name(e):
 #check to find team
 
 def get_Team(player, divs):
+    tName = ''
     for division in divs:
         for team in division:
-<<<<<<< HEAD
-            playerUrl = requests.get(team)
-            soup = BeautifulSoup(playerUrl.text)
-            playerNames = soup.select('td.sortcell')
-            print playerNames
+            browser = Browser()
+            playerUrl = browser.open(team)
+            site = playerUrl.read()
+            code = BeautifulSoup(site)
+            playerTable = code.find('table')
 
-            for a in playerNames:
-
-                if (player in a.find('a').contents[0]):
+            rows = playerTable.findChildren('tr')[2:]
+            for row in rows:
+                data = row.findChildren('td')
+                name = data[1].text
+                if player == name:
                     tName = team_Name(team)
-                    print tName
-
+                else:
+                    print 'player not found'
+                    
     return tName
 
 start = time.clock()
-get_Team(pl, nba)
+#w = get_Team(pl, nba)
 #print w
-=======
-            browser = Browser()
-            page = browser.open(team)
-            html = page.read()
-            code = BeautifulSoup(html)
-            table = code.find('table')
-
-            rows = table.findChildren('tr')[2:]
-            for row in rows:
-                cells = row.findChildren('td')
-                name = cells[1].text
-                if player == name:
-                    f = team_Name(team)
-                    
-    return f
-
-start = time.clock()
-w = get_Team(pl,nba);
-print w
->>>>>>> origin/master
 end = time.clock()
 #print end - start
 
 
 
-u = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
+team_Url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
 mech = Browser()
-page = mech.open(u)
+page = mech.open(team_Url)
 html = page.read()
 soup = BeautifulSoup(html)
 table = soup.find("table")
 
-'''
+
 st = []
 rows = table.findChildren('tr')[2:]
 for row in rows:
-     cells = row.findChildren('td')
-     for cell in cells:
-         value = cell.text
-         st.append(value)
-         #print "The value in this cell is %s" % value
+    cells = row.findChildren('td')
+    for cell in cells:
+        value = cell.text
+        st.append(value)
+
 
 #for s in st:
     #print str(s)
-#print st.index('Utah')
-#print st[:12]
+#if cityName in st:
+   # print st.index(cityName)
+
+#print st[st.index('Cleveland')-1:st.index('Cleveland') + 11]
 
 
-'''
 
 '''
 for row in table.findAll('tr')[2:]:
