@@ -129,8 +129,6 @@ for row in rows:
         st.append(info)
 
 
-#for s in st:
-    #print str(s)'
 team_row = st.index(city_name)
 if city_name in st:
     print team_row
