@@ -9,6 +9,7 @@ from mechanize import Browser
 
 pl = raw_input('Enter player name: ')
 
+
 #pool = Pool(8)
 
 
@@ -71,6 +72,14 @@ pacific = [warriors, clippers, lakers, suns, kings]
 nba = [atlantic, central, se, nw, sw, pacific]
 
 
+def process_Site(url):
+    browser = Browser()
+    u = browser.open(url)
+    page = u.read()
+    source = BeautifulSoup(page)
+
+    return source
+    
 
 #splits the Team string to get only the city name
 def team_Name(e):
@@ -87,10 +96,7 @@ def get_Team(player, divs):
     tName = ''
     for division in divs:
         for team in division:
-            browser = Browser()
-            playerUrl = browser.open(team)
-            site = playerUrl.read()
-            code = BeautifulSoup(site)
+            code = process_Site(team)
             playerTable = code.find('table')
 
             rows = playerTable.findChildren('tr')[2:]
@@ -104,55 +110,85 @@ def get_Team(player, divs):
     return tName
 
 start = time.clock()
-city_name = get_Team(pl, nba)
-print city_name
+#city_name = get_Team(pl, nba)
+#print pl + ' plays for ' + city_name
 end = time.clock()
 #print end - start
 
+def parse_Table(table):
+    data = []
+    rows = table.findChildren('tr')[2:]
+    for row in rows:
+        cells = row.findChildren('td')
+        for cell in cells:
+            value = cell.text
+            info = value.lower()
+            data.append(info)
+    return data
+
+team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
+site = process_Site(team_url)
+stats_table = site.find("table")
+t_stats = parse_Table(stats_table)
+
+'''
+team_row = t_stats.index(city_name)
+team_stats = t_stats[team_row-1:team_row + 11]
 
 
-team_Url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-mech = Browser()
-page = mech.open(team_Url)
-html = page.read()
-soup = BeautifulSoup(html)
-table = soup.find("table")
+#Get the stats that I want
+team_rank = team_stats[0]
+team_pace = team_stats[2]
+team_assists = team_stats[3]
+team_rebs = team_stats[7]
+team_off_efficiency = team_stats[10]
+team_def_efficiency = team_stats[11]
 
 
-st = []
-rows = table.findChildren('tr')[2:]
-for row in rows:
-    cells = row.findChildren('td')
-    for cell in cells:
-        value = cell.text
-        info = value.lower()
-        st.append(info)
+def get_Stats():
+    which_stats = raw_input('Enter ra for defensive efficiency rank, p for pace, a for assists, reb for rebounds, off for offensive efficiency, and def for defensive efficiency: ')
 
+    if which_stats == 'ra':
+        print team_rank
+    
+    elif which_stats == 'p':
+        print team_pace
+    
+    elif which_stats == 'a':
+        print team_assists
+    
+    elif which_stats == 'reb':
+        print team_rebs
+    
+    elif which_stats == 'off':
+        print team_off_efficiency
+    
+    elif which_stats == 'def':
+        print team_def_efficiency
+    
+    else:
+        print 'wrong input'
+    
 
-team_row = st.index(city_name)
-if city_name in st:
-    print team_row
-    print st[team_row-1:team_row + 11]
-
+#if city_name in st:
+    #get_Stats()
+    #print city_name + ' gets ' + team_assists + ' assists per game'
+    #print city_name + ' gets ' + team_rebs + ' rebounds per game'
+    #print team_stats
 
 
 '''
-for row in table.findAll('tr')[2:]:
-    col = row.findAll('td')
-    tRank = col[0].text
-    tCities = col[1].text
-    tPace = col[2].text
-    tAsts = col[3].text
-    tRebR = col[7].text
-    tOff = col[10].text
-    tDef = col[11].text
 
-    tStats = (tRank, tCities, tPace, tAsts, tRebR, tOff, tDef)
+#Get the daily schedule
+schedule_url = 'http://espn.go.com/nba/schedule'
+sched = process_Site(schedule_url)
+schedule_table = sched.find('table')
+sch = parse_Table(schedule_table)
 
-    print "|".join(tStats)
-    
- '''   
-
+#Games scheduled for current date
+print sch[0]
+for game in range(6,len(sch),6):
+    print sch[game]
 
 
 
