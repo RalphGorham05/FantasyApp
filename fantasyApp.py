@@ -68,13 +68,11 @@ kings = 'http://espn.go.com/nba/team/roster/_/name/sac/sacramento-kings'
 pacific = [warriors, clippers, lakers, suns, kings]
 
 
-
-
 nba = [atlantic, central, se, nw, sw, pacific]
 
 
 
-
+#splits the Team string to get only the city name
 def team_Name(e):
     teamString = e.split('/')
     lastWord = len(teamString) - 1
@@ -83,8 +81,8 @@ def team_Name(e):
 
     return city
 
-#check to find team
 
+#check to find team
 def get_Team(player, divs):
     tName = ''
     for division in divs:
@@ -101,14 +99,13 @@ def get_Team(player, divs):
                 name = data[1].text
                 if player == name:
                     tName = team_Name(team)
-                else:
-                    print 'player not found'
+                
                     
     return tName
 
 start = time.clock()
-#w = get_Team(pl, nba)
-#print w
+city_name = get_Team(pl, nba)
+print city_name
 end = time.clock()
 #print end - start
 
@@ -128,15 +125,16 @@ for row in rows:
     cells = row.findChildren('td')
     for cell in cells:
         value = cell.text
-        st.append(value)
+        info = value.lower()
+        st.append(info)
 
 
 #for s in st:
-    #print str(s)
-#if cityName in st:
-   # print st.index(cityName)
-
-#print st[st.index('Cleveland')-1:st.index('Cleveland') + 11]
+    #print str(s)'
+team_row = st.index(city_name)
+if city_name in st:
+    print team_row
+    print st[team_row-1:team_row + 11]
 
 
 
@@ -157,34 +155,7 @@ for row in table.findAll('tr')[2:]:
     
  '''   
 
-'''
-odd = []
-even = []
-tree = BeautifulSoup(up.text)
 
-for node in tree.findAll(attrs={'class': re.compile(r".*\evenrow\b.*")}):
-    even.append(node)
-for node in tree.findAll(attrs={'tr': re.compile(r".*\oddrow\b.*")}):
-    odd.append(node)
-
-team_Data = {}
-
-for o in odd:
-    #p = o.find('a').contents[0]
-    data = o.find('a')
-    
-    #for d in data:
-        #print d.text
-    cityNames = o.findAll('td')[1].text
-    if (w or w.upper() in cityNames):
-        print data
-'''
-
-
-
-  
-
-    
 
 
 
@@ -214,22 +185,4 @@ thread2.start()
 print "Exiting Main Thread"
 
 '''
-
-
-'''
-class Fantasy:
-    def __init__(self,p):
-        self.player = p
-
-    def getPlayerTeam(pl):
-        self.team = 'Duke'
-        return self.team
-
-
-
-
-test = Fantasy(pl)
-print test.player
-'''
-
 
