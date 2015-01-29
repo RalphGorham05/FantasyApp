@@ -185,10 +185,14 @@ sched = process_Site(schedule_url)
 schedule_table = sched.find('table')
 sch = parse_Table(schedule_table)
 
-#Games scheduled for current date
-print sch[0]
+
+#Create list of games scheduled for current date
+today_games = []
+
+today_games.append(sch[0])
 for game in range(6,len(sch),6):
-    print sch[game]
+    today_games.append(sch[game])
+
 
 
 
