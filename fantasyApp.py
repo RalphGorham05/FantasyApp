@@ -97,7 +97,16 @@ def team_Name(e):
     teamString = e.split('/')
     lastWord = len(teamString) - 1
     nameSeparated = teamString[lastWord].split('-')
-    city = nameSeparated[0]
+
+    #accounts for teams with cities with 2 word names(i.e New York, San Antonio, Portland Trail Blazers)
+    if len(nameSeparated) == 3:
+        city = nameSeparated[0] + ' ' + nameSeparated[1]
+        
+    #elif nameSeparated[0] == 'portland':
+        #city = 'portland'
+        
+    else:
+        city = nameSeparated[0]
 
     return city
 
@@ -113,6 +122,7 @@ def get_Team(player, divs):
 
             #make list of all the teams
             team_list.append(team_Name(team))
+            
 
             rows = playerTable.findChildren('tr')[2:]
             for row in rows:
@@ -130,8 +140,7 @@ city_name = get_Team(pl, nba)
 end = time.clock()
 #print end - start
 
-for te in team_list:
-    print te
+
 
 
 team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
@@ -139,11 +148,16 @@ site = process_Site(team_url)
 stats_table = site.find("table")
 t_stats = parse_Table(stats_table)
 
-'''
+
 team_row = t_stats.index(city_name)
 team_stats = t_stats[team_row-1:team_row + 11]
+stats_dict = {}
 
+stats_dict[city_name] = team_stats
+#print stats_dict
+    
 
+'''
 #Get the stats that I want
 team_rank = team_stats[0]
 team_pace = team_stats[2]
@@ -203,5 +217,15 @@ for game in range(6, len(sch), 6):
 
 #check if player playing today
 for game in today_games:
-    if city_name in game.split()[0]:
+    game = game.split()
+    g = str(game)
+    g = g.replace('at','')
+    if city_name in g:
+        print g
         print 'playing'
+
+
+
+
+
+        
