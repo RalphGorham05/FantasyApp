@@ -79,7 +79,18 @@ def process_Site(url):
     source = BeautifulSoup(page)
 
     return source
-    
+
+def parse_Table(table):
+    data = []
+    rows = table.findChildren('tr')[2:]
+    for row in rows:
+        cells = row.findChildren('td')
+        for cell in cells:
+            value = cell.text
+            info = value.lower()
+            data.append(info)
+
+    return data
 
 #splits the Team string to get only the city name
 def team_Name(e):
@@ -91,6 +102,7 @@ def team_Name(e):
     return city
 
 
+team_list = []
 #check to find team
 def get_Team(player, divs):
     tName = ''
@@ -98,6 +110,9 @@ def get_Team(player, divs):
         for team in division:
             code = process_Site(team)
             playerTable = code.find('table')
+
+            #make list of all the teams
+            team_list.append(team_Name(team))
 
             rows = playerTable.findChildren('tr')[2:]
             for row in rows:
@@ -110,21 +125,14 @@ def get_Team(player, divs):
     return tName
 
 start = time.clock()
-#city_name = get_Team(pl, nba)
+city_name = get_Team(pl, nba)
 #print pl + ' plays for ' + city_name
 end = time.clock()
 #print end - start
 
-def parse_Table(table):
-    data = []
-    rows = table.findChildren('tr')[2:]
-    for row in rows:
-        cells = row.findChildren('td')
-        for cell in cells:
-            value = cell.text
-            info = value.lower()
-            data.append(info)
-    return data
+for te in team_list:
+    print te
+
 
 team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
 site = process_Site(team_url)
@@ -190,37 +198,10 @@ sch = parse_Table(schedule_table)
 today_games = []
 
 today_games.append(sch[0])
-for game in range(6,len(sch),6):
+for game in range(6, len(sch), 6):
     today_games.append(sch[game])
 
-
-
-
-
-'''
-class myThread (threading.Thread):
-    def __init__(self, threadID, player, league):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.player = player
-        self.league = league
-        
-    def run(self):
-        print "Starting " + self.name
-        get_Team(self.player,self.league)
-        print "Exiting " + self.name
-
-
-
-# Create new threads
-thread1 = myThread(1, "Thread-1", 1,pl,nba)
-thread2 = myThread(2, "Thread-2", 2,pl,nba)
-
-# Start new Threads
-thread1.start()
-thread2.start()
-
-print "Exiting Main Thread"
-
-'''
-
+#check if player playing today
+for game in today_games:
+    if city_name in game.split()[0]:
+        print 'playing'
