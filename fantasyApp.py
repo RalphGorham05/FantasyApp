@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import requests
+from peeewee import *
 from multiprocessing import Pool
 import multiprocessing
 import threading
@@ -218,10 +218,8 @@ for game in range(6, len(sch), 6):
 #check if player playing today
 for game in today_games:
     game = game.split()
-    g = str(game)
-    g = g.replace('at','')
-    if city_name in g:
-        print g
+    if city_name in game:
+        print game
         print 'playing'
 
 
