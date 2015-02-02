@@ -30,5 +30,8 @@ class Player(Model):
 class Meta:
     database = db
 
+#Stats Table
+class Stats(Model):
+
 
 Team.create_table()
