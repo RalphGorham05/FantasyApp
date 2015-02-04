@@ -13,6 +13,8 @@ pl = raw_input('Enter player name: ')
 #pool = Pool(8)
 
 
+##################Team URLs section###################
+
 #Atlantic Division
 celtics = 'http://espn.go.com/nba/team/roster/_/name/bos/boston-celtics'
 nets = 'http://espn.go.com/nba/team/roster/_/name/bkn/brooklyn-nets'
@@ -72,99 +74,9 @@ pacific = [warriors, clippers, lakers, suns, kings]
 nba = [atlantic, central, se, nw, sw, pacific]
 
 
-def process_Site(url):
-    browser = Browser()
-    u = browser.open(url)
-    page = u.read()
-    source = BeautifulSoup(page)
-
-    return source
-
-def parse_Table(table):
-    data = []
-    rows = table.findChildren('tr')[2:]
-    for row in rows:
-        cells = row.findChildren('td')
-        for cell in cells:
-            value = cell.text
-            info = value.lower()
-            data.append(info)
-
-    return data
-
-#splits the Team string to get only the city name
-def team_Name(e):
-    teamString = e.split('/')
-    lastWord = len(teamString) - 1
-    nameSeparated = teamString[lastWord].split('-')
-
-    #accounts for teams with cities with 2 word names(i.e New York, San Antonio, Portland Trail Blazers)
-    if len(nameSeparated) == 3:
-        city = nameSeparated[0] + ' ' + nameSeparated[1]
-        
-    #elif nameSeparated[0] == 'portland':
-        #city = 'portland'
-        
-    else:
-        city = nameSeparated[0]
-
-    return city
 
 
-team_list = []
-#check to find team
-def get_Team(player, divs):
-    tName = ''
-    for division in divs:
-        for team in division:
-            code = process_Site(team)
-            playerTable = code.find('table')
-
-            #make list of all the teams
-            team_list.append(team_Name(team))
-            
-
-            rows = playerTable.findChildren('tr')[2:]
-            for row in rows:
-                data = row.findChildren('td')
-                name = data[1].text
-                if player == name:
-                    tName = team_Name(team)
-                
-                    
-    return tName
-
-start = time.clock()
-city_name = get_Team(pl, nba)
-#print pl + ' plays for ' + city_name
-end = time.clock()
-#print end - start
-
-
-
-
-team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-site = process_Site(team_url)
-stats_table = site.find("table")
-t_stats = parse_Table(stats_table)
-
-
-team_row = t_stats.index(city_name)
-team_stats = t_stats[team_row-1:team_row + 11]
-stats_dict = {}
-
-stats_dict[city_name] = team_stats
-#print stats_dict
-    
-
-'''
-#Get the stats that I want
-team_rank = team_stats[0]
-team_pace = team_stats[2]
-team_assists = team_stats[3]
-team_rebs = team_stats[7]
-team_off_efficiency = team_stats[10]
-team_def_efficiency = team_stats[11]
+###############functions section##################
 
 
 def get_Stats():
@@ -190,6 +102,118 @@ def get_Stats():
     
     else:
         print 'wrong input'
+
+
+#preps site for access and returns BSoup object        
+def process_Site(url):
+    browser = Browser()
+    u = browser.open(url)
+    page = u.read()
+    source = BeautifulSoup(page)
+
+    return source
+
+#parses table by row and returns a list with each row as element
+def parse_Table(table):
+    data = []
+    rows = table.findChildren('tr')[2:]
+    for row in rows:
+        cells = row.findChildren('td')
+        for cell in cells:
+            value = cell.text
+            info = value.lower()
+            data.append(info)
+
+    return data
+
+
+#parses site and return table with data
+def get_HTML_Table(url,data):
+    processed = process_Site(url)
+    data_table = processed.find(data)
+    table = parse_Table(data_table)
+
+    return table
+
+
+#splits the Team string to get only the city name
+def team_Name(e):
+    teamString = e.split('/')
+    lastWord = len(teamString) - 1
+    nameSeparated = teamString[lastWord].split('-')
+
+    #accounts for teams with cities with 2 word names(i.e New York, San Antonio, Portland Trail Blazers)
+    if len(nameSeparated) == 3:
+        city = nameSeparated[0] + ' ' + nameSeparated[1]
+        
+    #elif nameSeparated[0] == 'portland':
+        #city = 'portland'
+        
+    else:
+        city = nameSeparated[0]
+
+    return city
+
+
+#check to find team
+
+team_list = []
+def get_Team(player, divs):
+    tName = ''
+    for division in divs:
+        for team in division:
+            code = process_Site(team)
+            playerTable = code.find('table')
+
+            #make list of all the teams
+            team_list.append(team_Name(team))
+            
+            
+
+            rows = playerTable.findChildren('tr')[2:]
+            for row in rows:
+                data = row.findChildren('td')
+                name = data[1].text
+                if player == name:
+                    tName = team_Name(team)
+                
+                    
+    return tName
+
+
+
+
+###########Program start###############
+
+start = time.clock()
+city_name = get_Team(pl, nba)
+#print pl + ' plays for ' + city_name
+end = time.clock()
+#print end - start
+print team_list
+
+
+
+############Team Stats section#################
+
+
+team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
+t_stats = get_HTML_Table(team_url,'table')
+
+
+team_row = t_stats.index(city_name)
+team_stats = t_stats[team_row-1:team_row + 11]
+
+    
+
+'''
+#Get the stats that I want
+team_rank = team_stats[0]
+team_pace = team_stats[2]
+team_assists = team_stats[3]
+team_rebs = team_stats[7]
+team_off_efficiency = team_stats[10]
+team_def_efficiency = team_stats[11]
     
 
 #if city_name in st:
@@ -201,32 +225,40 @@ def get_Stats():
 
 '''
 
+
+##############Schedule section##############
+
+
 #Get the daily schedule
+    
 schedule_url = 'http://espn.go.com/nba/schedule'
-sched = process_Site(schedule_url)
-schedule_table = sched.find('table')
-sch = parse_Table(schedule_table)
+schedule = get_HTML_Table(schedule_url,'table')
 
 
 #Create list of games scheduled for current date
 today_games = []
 
-today_games.append(sch[0])
-for game in range(6, len(sch), 6):
-    today_games.append(sch[game])
+today_games.append(schedule[0])
+for game in range(6, len(schedule), 6):
+    today_games.append(schedule[game])
 
-#check if player playing today
-for game in today_games:
-    game = game.split()
-    print game
-    if city_name in game:
-        for g in game:
+
+'''
+#checks if player is playing today
+for each_game in today_games:
+    each_game = game.split()
+    if city_name in each_game:
+        for g in each_game:
             print g
     else:
         nop = False
 
 if nop == False:
     print 'not playing'
+'''
+
+
+
         
 
 
