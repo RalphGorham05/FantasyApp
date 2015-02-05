@@ -79,30 +79,26 @@ nba = [atlantic, central, se, nw, sw, pacific]
 ###############functions section##################
 
 
-def get_Stats():
-    which_stats = raw_input('Enter ra for defensive efficiency rank, p for pace, a for assists, reb for rebounds, off for offensive efficiency, and def for defensive efficiency: ')
+def get_teamStats(team_name):
+    team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
+    t_stats = get_HTML_Table(team_url,'table')
 
-    if which_stats == 'ra':
-        print team_rank
-    
-    elif which_stats == 'p':
-        print team_pace
-    
-    elif which_stats == 'a':
-        print team_assists
-    
-    elif which_stats == 'reb':
-        print team_rebs
-    
-    elif which_stats == 'off':
-        print team_off_efficiency
-    
-    elif which_stats == 'def':
-        print team_def_efficiency
-    
-    else:
-        print 'wrong input'
+    team_row = t_stats.index(team_name)
+    stats = t_stats[team_row-1:team_row + 11]
 
+    
+    #Get the stats that I want
+    team_rank = stats[0]
+    team_pace = stats[2]
+    team_assists = stats[3]
+    team_rebs = stats[7]
+    team_off_efficiency = stats[10]
+    team_def_efficiency = stats[11]
+
+    print stats
+
+    
+    
 
 #preps site for access and returns BSoup object        
 def process_Site(url):
@@ -148,7 +144,7 @@ def team_Name(e):
         if city == 'portland trail':
             city = 'portland'
         elif city == 'los angeles':
-            city = nameSeparated[0] + ' ' + nameSeparated[1] + ' ' + nameSeparated[2]
+            city = 'la' + ' ' + nameSeparated[2]
         
     else:
         city = nameSeparated[0]
@@ -184,7 +180,7 @@ def get_Team(player, divs):
 
 
 
-###########Program start###############
+###########Program start#######################################################
 
 start = time.clock()
 city_name = get_Team(pl, nba)
@@ -192,37 +188,6 @@ city_name = get_Team(pl, nba)
 end = time.clock()
 #print end - start
 
-
-############Team Stats section#################
-
-
-team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-t_stats = get_HTML_Table(team_url,'table')
-
-
-team_row = t_stats.index(city_name)
-team_stats = t_stats[team_row-1:team_row + 11]
-
-    
-
-'''
-#Get the stats that I want
-team_rank = team_stats[0]
-team_pace = team_stats[2]
-team_assists = team_stats[3]
-team_rebs = team_stats[7]
-team_off_efficiency = team_stats[10]
-team_def_efficiency = team_stats[11]
-    
-
-#if city_name in st:
-    #get_Stats()
-    #print city_name + ' gets ' + team_assists + ' assists per game'
-    #print city_name + ' gets ' + team_rebs + ' rebounds per game'
-    #print team_stats
-
-
-'''
 
 
 ##############Schedule section##############
@@ -232,7 +197,7 @@ team_def_efficiency = team_stats[11]
     
 schedule_url = 'http://espn.go.com/nba/schedule'
 schedule = get_HTML_Table(schedule_url, 'table')
-print schedule
+
 
 #Create list of games scheduled for current date
 today_games = []
@@ -242,23 +207,25 @@ for game in range(6, len(schedule), 6):
     today_games.append(schedule[game])
 
 
-'''
+
 #checks if player is playing today
 for each_game in today_games:
-    each_game = game.split()
-    if city_name in each_game:
-        for g in each_game:
+    games = each_game.split()
+    if city_name in games:
+        for g in games:
             print g
+            
     else:
-        nop = False
+        nope = False
 
-if nop == False:
-    print 'not playing'
-'''
-
+#if nope == False:
+    #print 'not playing'
 
 
-        
+
+############Team Stats section#################
+
+
 
 
 
