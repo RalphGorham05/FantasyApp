@@ -128,7 +128,7 @@ def parse_Table(table):
 
 
 #parses site and return table with data
-def get_HTML_Table(url,data):
+def get_HTML_Table(url, data):
     processed = process_Site(url)
     data_table = processed.find(data)
     table = parse_Table(data_table)
@@ -142,12 +142,13 @@ def team_Name(e):
     lastWord = len(teamString) - 1
     nameSeparated = teamString[lastWord].split('-')
 
-    #accounts for teams with cities with 2 word names(i.e New York, San Antonio, Portland Trail Blazers)
+    #accounts for teams with cities with 2 word names(i.e LA Lakers, LA Clippers, Portland Trail Blazers)
     if len(nameSeparated) == 3:
         city = nameSeparated[0] + ' ' + nameSeparated[1]
-        
-    #elif nameSeparated[0] == 'portland':
-        #city = 'portland'
+        if city == 'portland trail':
+            city = 'portland'
+        elif city == 'los angeles':
+            city = nameSeparated[0] + ' ' + nameSeparated[1] + ' ' + nameSeparated[2]
         
     else:
         city = nameSeparated[0]
@@ -155,8 +156,8 @@ def team_Name(e):
     return city
 
 
-#check to find team
 
+#check to find team
 team_list = []
 def get_Team(player, divs):
     tName = ''
@@ -190,8 +191,6 @@ city_name = get_Team(pl, nba)
 #print pl + ' plays for ' + city_name
 end = time.clock()
 #print end - start
-print team_list
-
 
 
 ############Team Stats section#################
@@ -232,8 +231,8 @@ team_def_efficiency = team_stats[11]
 #Get the daily schedule
     
 schedule_url = 'http://espn.go.com/nba/schedule'
-schedule = get_HTML_Table(schedule_url,'table')
-
+schedule = get_HTML_Table(schedule_url, 'table')
+print schedule
 
 #Create list of games scheduled for current date
 today_games = []
