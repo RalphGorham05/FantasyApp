@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from multiprocessing import Pool
 import multiprocessing
 import threading
-import time
+from datetime import datetime, time
 import re
 from mechanize import Browser
 
@@ -81,7 +81,7 @@ nba = [atlantic, central, se, nw, sw, pacific]
 
 def get_teamStats(team_name):
     team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-    t_stats = get_HTML_Table(team_url,'table')
+    t_stats = get_HTML_Table(team_url,'table',0)
 
     team_row = t_stats.index(team_name)
     stats = t_stats[team_row-1:team_row + 11]
@@ -124,9 +124,9 @@ def parse_Table(table):
 
 
 #parses site and return table with data
-def get_HTML_Table(url, data):
+def get_HTML_Table(url, data, table_number):
     processed = process_Site(url)
-    data_table = processed.find(data)
+    data_table = processed.findAll(data)[table_number]
     table = parse_Table(data_table)
 
     return table
@@ -182,10 +182,12 @@ def get_Team(player, divs):
 
 ###########Program start#######################################################
 
-start = time.clock()
+
+
+#start = time.clock()
 city_name = get_Team(pl, nba)
 #print pl + ' plays for ' + city_name
-end = time.clock()
+#end = time.clock()
 #print end - start
 
 
@@ -194,9 +196,22 @@ end = time.clock()
 
 
 #Get the daily schedule
-    
+
+
+
 schedule_url = 'http://espn.go.com/nba/schedule'
-schedule = get_HTML_Table(schedule_url, 'table')
+sched = process_Site(schedule_url)
+
+now = datetime.now()
+current_time = now.time()
+#today = time.strftime('%A' + ', ' + '%B' + ' ' + "%s" %now.day)
+
+if time(12,00) <= current_time <= time(23,59):
+    schedule = get_HTML_Table(schedule_url, 'table', 0)
+    
+else:
+    schedule = get_HTML_Table(schedule_url, 'table', 1)
+    
 
 
 #Create list of games scheduled for current date
@@ -211,8 +226,28 @@ for game in range(6, len(schedule), 6):
 #checks if player is playing today
 for each_game in today_games:
     games = each_game.split()
-    if len(games) == 4:
-        ciy_name = games[0] + games[1]
+    names_size = len(games)
+
+    if names_size == 5:
+        games[0] = games[0] + ' ' + games[1]
+        games[1] = games[3] + ' ' + games[4]
+        del games[2:]
+
+    elif names_size == 4 and games[1] == 'at':
+        games[1] = games[2] + ' ' + games[3]
+        del games[2:]
+        
+    elif names_size == 4:
+        games[0] = games[0] + ' ' + games[1]
+        games[1] = games[names_size - 1]
+        del games[2:]
+
+    else:
+        games[1] = games[2]
+        del games [2:]
+
+    print games
+        
     if city_name in games:
         for g in games:
             print g
