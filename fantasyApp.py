@@ -211,9 +211,12 @@ for game in range(6, len(schedule), 6):
 #checks if player is playing today
 for each_game in today_games:
     games = each_game.split()
+    if len(games) == 4:
+        ciy_name = games[0] + games[1]
     if city_name in games:
         for g in games:
             print g
+
             
     else:
         nope = False
@@ -228,7 +231,3 @@ for each_game in today_games:
 
 
 
-
-
-
-        
