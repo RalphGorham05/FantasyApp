@@ -81,21 +81,23 @@ nba = [atlantic, central, se, nw, sw, pacific]
 
 def get_teamStats(team_name):
     team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-    t_stats = get_HTML_Table(team_url,'table',0)
+    t_stats = get_HTML_Table(team_url, 'table', 0)
 
     team_row = t_stats.index(team_name)
     stats = t_stats[team_row-1:team_row + 11]
+    del stats[1]
 
     
     #Get the stats that I want
     team_rank = stats[0]
-    team_pace = stats[2]
-    team_assists = stats[3]
-    team_rebs = stats[7]
-    team_off_efficiency = stats[10]
-    team_def_efficiency = stats[11]
+    team_pace = stats[1]
+    team_assists = stats[2]
+    team_rebs = stats[6]
+    team_off_efficiency = stats[9]
+    team_def_efficiency = stats[10]
 
-    print stats
+    print('\t '.join(map(str, stats)))
+
 
     
     
@@ -186,7 +188,7 @@ def get_Team(player, divs):
 
 #start = time.clock()
 city_name = get_Team(pl, nba)
-#print pl + ' plays for ' + city_name
+print pl + ' plays for ' + city_name
 #end = time.clock()
 #print end - start
 
@@ -242,26 +244,30 @@ for each_game in today_games:
         games[1] = games[names_size - 1]
         del games[2:]
 
-    else:
+    elif names_size == 3:
         games[1] = games[2]
-        del games [2:]
+        del games[2:]
 
-    print games
-        
+############Team Stats section#################
+'''
     if city_name in games:
         for g in games:
             print g
+            print 'Defensive Rank \t Pace \t Ast \t Rebs \t Off Efficiency \t Def Efficiency'
+            print ' '
+            print get_teamStats(g)
 
-            
-    else:
-        nope = False
-
-#if nope == False:
-    #print 'not playing'
+'''
 
 
+position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
 
-############Team Stats section#################
+position_def = get_HTML_Table(position_url, 'table', 0)
+print position_def
+
+
+
+
 
 
 
