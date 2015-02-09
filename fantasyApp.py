@@ -126,7 +126,7 @@ def parse_Table(table):
 
 
 #parses site and return table with data
-def get_HTML_Table(url, data, table_number):
+def get_HTML_Table(url, data, table_number = 0):
     processed = process_Site(url)
     data_table = processed.findAll(data)[table_number]
     table = parse_Table(data_table)
@@ -263,12 +263,29 @@ for each_game in today_games:
 position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
 
 position_def = get_HTML_Table(position_url, 'table', 0)
-print position_def
+
+t_name = city_name.split()
+#print t_name[1]
+
+'''
+position_stats = []
+r = 0
+for r in range(r,len(position_def),14):
+    position_stats.append(position_def[r:r + 14])
+
+for p in position_stats:
+    if city_name in p:
+        print p
+
+'''
 
 
+nba_url = 'http://stats.nba.com/tracking/#!/player/possessions/'
 
+possessions = get_HTML_Table(nba_url, 'table')
 
-
+for p in possessions:
+    print p
 
 
 
