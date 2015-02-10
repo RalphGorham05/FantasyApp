@@ -51,3 +51,16 @@ once have team, go to team stats website
 		
 video about scraping
 https://www.youtube.com/watch?v=52wxGESwQSA
+
+
+------------------------------------------------------------
+
+v2
+get list of teams playing today
+
+print team stats for those teams 
+
+pick team for each position that gives up most points to that position
+	-.ie 4 games, pick the worst team guarding PG, worst team guarding SG, etc
+
+

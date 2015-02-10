@@ -7,7 +7,7 @@ from datetime import datetime, time
 import re
 from mechanize import Browser
 
-pl = raw_input('Enter player name: ')
+#pl = raw_input('Enter player name: ')
 
 
 #pool = Pool(8)
@@ -126,7 +126,7 @@ def parse_Table(table):
 
 
 #parses site and return table with data
-def get_HTML_Table(url, data, table_number = 0):
+def get_HTML_Table(url, data, table_number):
     processed = process_Site(url)
     data_table = processed.findAll(data)[table_number]
     table = parse_Table(data_table)
@@ -187,8 +187,8 @@ def get_Team(player, divs):
 
 
 #start = time.clock()
-city_name = get_Team(pl, nba)
-print pl + ' plays for ' + city_name
+#city_name = get_Team(pl, nba)
+#print pl + ' plays for ' + city_name
 #end = time.clock()
 #print end - start
 
@@ -200,7 +200,7 @@ print pl + ' plays for ' + city_name
 #Get the daily schedule
 
 
-
+'''
 schedule_url = 'http://espn.go.com/nba/schedule'
 sched = process_Site(schedule_url)
 
@@ -249,13 +249,15 @@ for each_game in today_games:
         del games[2:]
 
 ############Team Stats section#################
-'''
-    if city_name in games:
-        for g in games:
-            print g
-            print 'Defensive Rank \t Pace \t Ast \t Rebs \t Off Efficiency \t Def Efficiency'
-            print ' '
-            print get_teamStats(g)
+
+
+#print today_games
+    #if city_name in games:
+#for g in games:
+    #print g
+    #print 'Defensive Rank \t Pace \t Ast \t Rebs \t Off Efficiency \t Def Efficiency'
+    #print ' '
+    #print get_teamStats(g)
 
 '''
 
@@ -264,22 +266,21 @@ position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKi
 
 position_def = get_HTML_Table(position_url, 'table', 0)
 
-t_name = city_name.split()
+#t_name = city_name.split()
 #print t_name[1]
 
-'''
+
 position_stats = []
 r = 0
 for r in range(r,len(position_def),14):
     position_stats.append(position_def[r:r + 14])
 
 for p in position_stats:
-    if city_name in p:
-        print p
+    print p
+
+
 
 '''
-
-
 nba_url = 'http://stats.nba.com/tracking/#!/player/possessions/'
 
 possessions = get_HTML_Table(nba_url, 'table')
@@ -287,5 +288,5 @@ possessions = get_HTML_Table(nba_url, 'table')
 for p in possessions:
     print p
 
-
+'''
 
