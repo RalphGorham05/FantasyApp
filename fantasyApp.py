@@ -199,8 +199,8 @@ def get_Team(player, divs):
 
 #Get the daily schedule
 
-
 '''
+
 schedule_url = 'http://espn.go.com/nba/schedule'
 sched = process_Site(schedule_url)
 
@@ -251,13 +251,13 @@ for each_game in today_games:
 ############Team Stats section#################
 
 
-#print today_games
+
     #if city_name in games:
-#for g in games:
-    #print g
-    #print 'Defensive Rank \t Pace \t Ast \t Rebs \t Off Efficiency \t Def Efficiency'
-    #print ' '
-    #print get_teamStats(g)
+    for g in games:
+        print g
+        print 'Defensive Rank \t Pace \t Ast \t Rebs \t Off Efficiency \t Def Efficiency'
+        print ' '
+        get_teamStats(g)
 
 '''
 
@@ -269,17 +269,37 @@ position_def = get_HTML_Table(position_url, 'table', 0)
 #t_name = city_name.split()
 #print t_name[1]
 
-
+db = {}
 position_stats = []
+each_team = []
 r = 0
+q = 1
+
 for r in range(r,len(position_def),14):
     position_stats.append(position_def[r:r + 14])
 
+for q in range(q, len(position_stats),13):
+    each_team.append(position_stats[q:q+13])
+    
 for p in position_stats:
-    print p
+    y = team_Name(p[0])
+    print y
+
+    
+    '''
+    t = p[0].split()
+    t = t[len(t)-1]
+    db[t] = p
+    
+    #print p
 
 
+for k,v in db.iteritems():
+    print k,v
+'''
 
+
+    
 '''
 nba_url = 'http://stats.nba.com/tracking/#!/player/possessions/'
 
