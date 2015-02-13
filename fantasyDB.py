@@ -8,15 +8,11 @@ class BaseModel(Model):
     class Meta():
         database = db
 
-class Team(BaseModel):
+class Teams(BaseModel):
+    team = CharField()
+    city = CharField()
     abbr = CharField()
-    name = CharField()
-    rank = IntegerField()
-    pace = IntegerField()
-    assists = IntegerField()
-    rebs = IntegerField()
-    offensiveE = IntegerField()
-    defensiveE = IntegerField()
+
 
 
 
@@ -30,8 +26,17 @@ class Player(Model):
 class Meta:
     database = db
 
+
 #Stats Table
+
+class Meta:
+    database = db
+
 class Stats(Model):
+    team = CharField()
 
 
-Team.create_table()
+r = 5
+
+#Teams.create_table()
+

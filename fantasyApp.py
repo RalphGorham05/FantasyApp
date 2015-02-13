@@ -1,13 +1,17 @@
 from bs4 import BeautifulSoup
-#from peeewee import *
 from multiprocessing import Pool
 import multiprocessing
 import threading
 from datetime import datetime, time
 import re
 from mechanize import Browser
+import peewee
+from peewee import *
+import itertools
 
-#pl = raw_input('Enter player name: ')
+
+
+pl = raw_input('Enter player name: ')
 
 
 #pool = Pool(8)
@@ -135,7 +139,7 @@ def get_HTML_Table(url, data, table_number):
 
 
 #splits the Team string to get only the city name
-def team_Name(e):
+def city_Name(e):
     teamString = e.split('/')
     lastWord = len(teamString) - 1
     nameSeparated = teamString[lastWord].split('-')
@@ -153,10 +157,31 @@ def team_Name(e):
 
     return city
 
+#gets team name
+def city_Abbr(e):
+    teamString = e.split('/')
+    spot = len(teamString) - 2
+    ab = teamString[spot]
+
+    return ab
+
+#gets abbreviation
+def team_Name(e):
+    teamString = e.split('/')
+    lastWord = len(teamString) - 1
+    nameSeparated = teamString[lastWord].split('-')
+    whole = len(nameSeparated)
+
+    team = nameSeparated[whole - 1]
+
+    return team
+
 
 
 #check to find team
+city_list = []
 team_list = []
+abr_list = []
 def get_Team(player, divs):
     tName = ''
     for division in divs:
@@ -164,8 +189,12 @@ def get_Team(player, divs):
             code = process_Site(team)
             playerTable = code.find('table')
 
-            #make list of all the teams
+            #make list of all the cities
+            city_list.append(city_Name(team))
+            #make list of all the team
             team_list.append(team_Name(team))
+            #make list of abbrs
+            abr_list.append(city_Abbr(team))
             
             
 
@@ -174,7 +203,7 @@ def get_Team(player, divs):
                 data = row.findChildren('td')
                 name = data[1].text
                 if player == name:
-                    tName = team_Name(team)
+                    tName = city_Name(team)
                 
                     
     return tName
@@ -187,7 +216,7 @@ def get_Team(player, divs):
 
 
 #start = time.clock()
-#city_name = get_Team(pl, nba)
+city_name = get_Team(pl, nba)
 #print pl + ' plays for ' + city_name
 #end = time.clock()
 #print end - start
@@ -199,7 +228,7 @@ def get_Team(player, divs):
 
 #Get the daily schedule
 
-'''
+
 
 schedule_url = 'http://espn.go.com/nba/schedule'
 sched = process_Site(schedule_url)
@@ -259,9 +288,9 @@ for each_game in today_games:
         print ' '
         get_teamStats(g)
 
+
+
 '''
-
-
 position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
 
 position_def = get_HTML_Table(position_url, 'table', 0)
@@ -275,18 +304,18 @@ each_team = []
 r = 0
 q = 1
 
-for r in range(r,len(position_def),14):
+for r in range(r,len(position_def), 14):
     position_stats.append(position_def[r:r + 14])
 
-for q in range(q, len(position_stats),13):
+for q in range(q, len(position_stats), 13):
     each_team.append(position_stats[q:q+13])
     
 for p in position_stats:
     y = team_Name(p[0])
     print y
 
-    
-    '''
+
+
     t = p[0].split()
     t = t[len(t)-1]
     db[t] = p
@@ -296,11 +325,11 @@ for p in position_stats:
 
 for k,v in db.iteritems():
     print k,v
-'''
+
 
 
     
-'''
+
 nba_url = 'http://stats.nba.com/tracking/#!/player/possessions/'
 
 possessions = get_HTML_Table(nba_url, 'table')
@@ -308,5 +337,25 @@ possessions = get_HTML_Table(nba_url, 'table')
 for p in possessions:
     print p
 
-'''
 
+
+
+
+db = MySQLDatabase('fantasyApp', user='root', passwd='')
+
+
+class BaseModel(Model):
+    class Meta():
+        database = db
+
+class Teamsapo(BaseModel):
+    team = CharField(default='')
+    city = CharField(default='')
+    abbr = CharField(default='')
+
+Teamsapo.create_table()
+
+
+for t, c, a in itertools.izip(team_list, city_list, abr_list):
+    Teamsapo.create(team=t, city=c, abbr=a)
+'''
