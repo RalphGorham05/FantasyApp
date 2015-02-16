@@ -2,12 +2,12 @@ from datetime import datetime, time
 import re
 from mechanize import Browser
 from bs4 import BeautifulSoup
-import peewee
-from peewee import *
+#import peewee
+#from peewee import *
 import itertools
 
 
-
+'''
 db = MySQLDatabase('fantasyApp', user='root', passwd='')
 
 
@@ -23,10 +23,28 @@ class BaseModel(Model):
 class Players(BaseModel):
     name = CharField(default='')
     pid = IntegerField(default='')
+'''
 
 
+def get_playerStats(pid, table_num = 3):
+    url = 'http://espn.go.com/nba/player/_/id/'
+    url += str(pid)
+    br = Browser()
+    site = br.open(url)
+    page = site.read()
+    html = BeautifulSoup(page)
+    tables = html.findAll('table')
 
+    stats = tables[table_num]
 
+    
+    rows = stats.findChildren('tr')[1:2]
+    for row in rows:
+        data = row.findChildren('td')[1:]
+        name = data
+        for n in name:
+            print n.text
+            
 
 def get_teamStats(team_name):
     team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
@@ -130,6 +148,8 @@ abr_list = []
 #check to find team
 def get_Team(player, divs):
     tName = ''
+    pdict = {}
+
     for division in divs:
         for team in division:
             code = process_Site(team)
@@ -144,16 +164,18 @@ def get_Team(player, divs):
             abr_list.append(city_Abbr(team))
             
             
-            pdict = {}
             rows = playerTable.findChildren('tr')[2:]
             for row in rows:
                 data = row.findChildren('td')
                 name = data[1].text
+               
                 pi = get_pID(name, team)
-                pdict[name] = pi
+                #pdict[name] = pi
 
-                for k, v in pdict.iteritems():
-                    Players.create(name=k, pid=v)
+                #for k, v in pdict.iteritems():
+                    #print k,v 
+                    #Players.create(name=k, pid=v)
+                
                 if player == name:
                     tName = city_Name(team)
 
@@ -176,4 +198,19 @@ def get_pID(player, url):
             sep = link.get('href').split('/')
             pid = sep[len(sep)-2]
 
-    return pid        
+    return pid
+
+
+def get_players(team):
+    players = []
+
+    code = process_Site(team)
+    playerTable = code.find('table')
+    rows = playerTable.findChildren('tr')[2:]
+    for row in rows:
+        data = row.findChildren('td')
+        name = data[1].text
+        players.append(name)
+
+    return players
+

@@ -5,8 +5,8 @@ import threading
 from datetime import datetime, time
 import re
 from mechanize import Browser
-import peewee
-from peewee import *
+#import peewee
+#from peewee import *
 import itertools
 import functions
 
@@ -78,6 +78,13 @@ nba = [atlantic, central, se, nw, sw, pacific]
 
 pl = raw_input('Enter player name: ')
 
+teams = {}
+for div in nba:
+    for team in div:
+        teams[team] = functions.get_players(team)
+
+for k,v in teams.iteritems():
+    print k,v
 #start = time.clock()
 city_name = functions.get_Team(pl, nba)
 #print pl + ' plays for ' + city_name

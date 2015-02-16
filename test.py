@@ -1,32 +1,31 @@
 from mechanize import Browser
 from bs4 import BeautifulSoup
+from functions import process_Site
 
 
 pid = 2745
+url = 'http://espn.go.com/nba/team/roster/_/name/sac/sacramento-kings'
 
+def get_players(team):
+    players = []
 
-def get_playerStats(pid):
-    url = 'http://espn.go.com/nba/player/_/id/'
-    url += str(pid)
-    br = Browser()
-    site = br.open(url)
-    page = site.read()
-    html = BeautifulSoup(page)
-    tables = html.findAll('table')
-
-    stats = tables[3]
-
-    
-    rows = stats.findChildren('tr')[1:2]
+    code = process_Site(team)
+    playerTable = code.find('table')
+    rows = playerTable.findChildren('tr')[2:]
     for row in rows:
-        data = row.findChildren('td')[1:]
-        name = data
-        for n in name:
-            print n.text
+        data = row.findChildren('td')
+        name = data[1].text
+        players.append(name)
+
+    return players
+    
+    
 
 
 
-get_s(2745)
+l = get_players(url)
+for k in l:
+    print k
 
    
     
