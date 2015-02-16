@@ -5,10 +5,9 @@ from bs4 import BeautifulSoup
 pid = 2745
 
 
-
-def get_s(pid):
+def get_playerStats(pid):
     url = 'http://espn.go.com/nba/player/_/id/'
-    url = url + str(pid)
+    url += str(pid)
     br = Browser()
     site = br.open(url)
     page = site.read()

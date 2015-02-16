@@ -2,6 +2,29 @@ from datetime import datetime, time
 import re
 from mechanize import Browser
 from bs4 import BeautifulSoup
+import peewee
+from peewee import *
+import itertools
+
+
+
+db = MySQLDatabase('fantasyApp', user='root', passwd='')
+
+
+#for t, c, a in itertools.izip(team_list, city_list, abr_list):
+    #Teamsapo.create(team=t, city=c, abbr=a)
+
+
+
+class BaseModel(Model):
+    class Meta():
+        database = db
+
+class Players(BaseModel):
+    name = CharField(default='')
+    pid = IntegerField(default='')
+
+
 
 
 
@@ -121,19 +144,22 @@ def get_Team(player, divs):
             abr_list.append(city_Abbr(team))
             
             
-
+            pdict = {}
             rows = playerTable.findChildren('tr')[2:]
             for row in rows:
                 data = row.findChildren('td')
                 name = data[1].text
-                pid = get_pID(name, team)
-                print name, pid
-                
+                pi = get_pID(name, team)
+                pdict[name] = pi
+
+                for k, v in pdict.iteritems():
+                    Players.create(name=k, pid=v)
                 if player == name:
                     tName = city_Name(team)
-                
-                    
+
     return tName
+
+
 
 
 #gets ESPN player id

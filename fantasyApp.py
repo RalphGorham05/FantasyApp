@@ -5,8 +5,8 @@ import threading
 from datetime import datetime, time
 import re
 from mechanize import Browser
-#import peewee
-#from peewee import *
+import peewee
+from peewee import *
 import itertools
 import functions
 
@@ -80,7 +80,7 @@ pl = raw_input('Enter player name: ')
 
 #start = time.clock()
 city_name = functions.get_Team(pl, nba)
-print pl + ' plays for ' + city_name
+#print pl + ' plays for ' + city_name
 #end = time.clock()
 #print end - start
 
@@ -201,7 +201,7 @@ for p in possessions:
     print p
 
 
-
+'''
 
 
 db = MySQLDatabase('fantasyApp', user='root', passwd='')
@@ -216,9 +216,20 @@ class Teamsapo(BaseModel):
     city = CharField(default='')
     abbr = CharField(default='')
 
-Teamsapo.create_table()
 
 
-for t, c, a in itertools.izip(team_list, city_list, abr_list):
-    Teamsapo.create(team=t, city=c, abbr=a)
-'''
+
+#for t, c, a in itertools.izip(team_list, city_list, abr_list):
+    #Teamsapo.create(team=t, city=c, abbr=a)
+
+
+
+class BaseModel(Model):
+    class Meta():
+        database = db
+
+class Players(BaseModel):
+    name = CharField(default='')
+    pid = IntegerField(default='')
+
+
