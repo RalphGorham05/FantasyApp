@@ -81,15 +81,12 @@ pl = raw_input('Enter player name: ')
 teams = {}
 for div in nba:
     for team in div:
-        teams[team] = functions.get_players(team)
+        teams[functions.team_Name(team)] = functions.get_players(team)
 
-for k,v in teams.iteritems():
-    print k,v
-#start = time.clock()
+
 city_name = functions.get_Team(pl, nba)
 #print pl + ' plays for ' + city_name
-#end = time.clock()
-#print end - start
+
 
 
 

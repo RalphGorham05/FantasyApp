@@ -200,7 +200,7 @@ def get_pID(player, url):
 
     return pid
 
-
+#gets list of players on team
 def get_players(team):
     players = []
 

@@ -1,11 +1,11 @@
 from mechanize import Browser
 from bs4 import BeautifulSoup
-from functions import process_Site
+from functions import process_Site, team_Name
 
 
 pid = 2745
 url = 'http://espn.go.com/nba/team/roster/_/name/sac/sacramento-kings'
-
+print team_Name(url)
 def get_players(team):
     players = []
 
