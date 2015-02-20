@@ -1,5 +1,16 @@
 from mechanize import Browser
 from bs4 import BeautifulSoup
+import functions
+
+
+nba = []
+f = open("team urls.txt", 'r')
+for line in f:
+    nba.append(line)
+    
+f.close()
+
+
 
 class Player:
     def __init__(self, name):
@@ -9,44 +20,25 @@ class Player:
         self.stats = []
 
 
-    city_list = []
-team_list = []
-abr_list = []
-#check to find team
-def get_Team(player, divs):
-    tName = ''
-    pdict = {}
 
-    for division in divs:
-        for team in division:
-            code = process_Site(team)
+    #check to find team
+    def get_Team(self, league):
+        tName = ''
+
+        for team in league:
+            code = functions.process_Site(team)
             playerTable = code.find('table')
             
-
-            #make list of all the cities
-            city_list.append(city_Name(team))
-            #make list of all the team
-            team_list.append(team_Name(team))
-            #make list of abbrs
-            abr_list.append(city_Abbr(team))
-            
-            
             rows = playerTable.findChildren('tr')[2:]
+
             for row in rows:
                 data = row.findChildren('td')
                 name = data[1].text
-               
-                pi = get_pID(name, team)
-                #pdict[name] = pi
-
-                #for k, v in pdict.iteritems():
-                    #print k,v 
-                    #Players.create(name=k, pid=v)
                 
-                if player == name:
-                    tName = city_Name(team)
+                if self.name == name:
+                    tName = functions.city_Name(team)
 
-    return tName
+        self.team = tName
 
 
     #returns player espn id
@@ -88,7 +80,8 @@ def get_Team(player, divs):
 
 
 p = Player('Brandon Bass')
-p.get_pID('http://espn.go.com/nba/team/roster/_/name/bos/boston-celtics')
-print p.pid
+p.get_Team(nba)
+print p.team
+
 
         
