@@ -9,21 +9,23 @@ class Team:
         self.url = ''
 
     def get_url(self):
-        for team in urls.iteritems():
-            if self.name == team:
-                self.url = urls[team]
+        for team in urls:
+            if self.name == str(team):
+                self.url = urls[str(team)]
 
     #gets list of players on team
     def get_players(self):
         players = []
 
-        code = process_Site(self.name)
+        code = process_Site(self.url)
         playerTable = code.find('table')
         rows = playerTable.findChildren('tr')[2:]
         for row in rows:
             data = row.findChildren('td')
             player = data[1].text
             self.players.append(player)
+
+        
 
 
     def get_stats(self):
@@ -47,6 +49,9 @@ class Team:
 
 
 t = Team()
-t.name = 'boston'
+t.name = 'celtics'
 t.get_url()
-print t.url
+t.get_players()
+players = t.players()
+for player in players:
+    print player

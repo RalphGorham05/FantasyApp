@@ -14,17 +14,17 @@ from functions import *
 
 ###########Program start#######################################################
 
-#pl = raw_input('Enter player name: ')
+pl = raw_input('Enter player name: ')
 
 
 
-#city_name = get_Team(pl, nba)
-#print pl + ' plays for ' + city_name
+city_name = get_Team(pl)
+print pl + ' plays for ' + city_name
 
 
 
 
-
+'''
 ##############Schedule section##############
 
 
@@ -82,7 +82,8 @@ for each_game in today_games:
 ############Team Stats section#################
 
 
-total_teams = len(today_games) * 2
+#total_teams = len(today_games) * 2
+#for x in range(1,len(today_games) + 1):
     #if city_name in games:
     for g in games:
         print g
@@ -93,6 +94,8 @@ total_teams = len(today_games) * 2
         
         #s = get_teamStats(g)
         
+
+'''
 
 
 '''

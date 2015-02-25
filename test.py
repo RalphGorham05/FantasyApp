@@ -60,7 +60,6 @@ kings = 'http://espn.go.com/nba/team/roster/_/name/sac/sacramento-kings'
 
 pacific = [warriors, clippers, lakers, suns, kings]
 
-
 nba = [atlantic, central, se, nw, sw, pacific]
 
 urls = {}
@@ -69,8 +68,6 @@ for div in nba:
     for team in div:
         urls[team_Name(team)] = team
 
-for k, v in urls.iteritems():
-    print k, v
-
+print urls['rockets']
 
 

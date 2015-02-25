@@ -209,49 +209,50 @@ urls = {}
 for div in nba:
     for team in div:
         urls[team_Name(team)] = team
-
+    
 
 city_list = []
 team_list = []
 abr_list = []
 #check to find team
-def get_Team(player, league):
+def get_Team(player):
     tName = ''
     pdict = {}
 
-    for div in league:
-        for team in div:
-            code = process_Site(team)
-            playerTable = code.find('table')
+    
+    for team in urls:
+        page = str(team)
+        code = process_Site(urls[page])
+        playerTable = code.find('table')
             
 
-            #make list of all the cities
-            city_list.append(city_Name(team))
-            #make list of all the team
-            team_list.append(team_Name(team))
-            #make list of abbrs
-            abr_list.append(city_Abbr(team))
+        #make list of all the cities
+        city_list.append(city_Name(team))
+        #make list of all the team
+        team_list.append(team_Name(team))
+        #make list of abbrs
+        abr_list.append(city_Abbr(team))
             
             
-            rows = playerTable.findChildren('tr')[2:]
-            for row in rows:
-                data = row.findChildren('td')
-                name = data[1].text
+        rows = playerTable.findChildren('tr')[2:]
+        for row in rows:
+            data = row.findChildren('td')
+            name = data[1].text
                    
-                pi = get_pID(name, team)
-                #pdict[name] = pi
+            #pi = get_pID(name, team)
+            #pdict[name] = pi
 
-                #for k, v in pdict.iteritems():
-                    #print k,v 
-                    #Players.create(name=k, pid=v)
+            #for k, v in pdict.iteritems():
+                #print k,v 
+                #Players.create(name=k, pid=v)
                     
-                if player == name:
-                    tName = city_Name(team)
+            if player == name:
+                tName = city_Name(team)
 
     return tName
 
 
-
+get_Team('James Harden')
 
 #gets ESPN player id
 def get_pID(player, url):
