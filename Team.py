@@ -1,4 +1,5 @@
 from functions import *
+from Player import *
 
 
 class Team:
@@ -15,7 +16,6 @@ class Team:
 
     #gets list of players on team
     def get_players(self):
-        players = []
 
         code = process_Site(self.url)
         playerTable = code.find('table')
@@ -51,7 +51,12 @@ class Team:
 t = Team()
 t.name = 'celtics'
 t.get_url()
+u = t.url
+
 t.get_players()
-players = t.players()
+players = t.players
+
 for player in players:
-    print player
+    p = Player(str(player))
+    p.get_pID(u)
+    print p.name, p.pid
