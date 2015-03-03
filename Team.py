@@ -47,15 +47,16 @@ class Team:
 
         print('\t '.join(map(str, stats)))
 
-
+'''
 t = Team()
 t.get_url()
 u = t.url
-
 t.get_players()
+
 players = t.players
 
 for player in players:
     p = Player(str(player))
     p.get_pID(u)
     print p.name, p.pid
+'''

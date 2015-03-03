@@ -10,6 +10,7 @@ from mechanize import Browser
 import itertools
 from functions import *
 import Team
+from Team import *
 import Player
 
 
