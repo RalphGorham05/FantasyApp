@@ -49,7 +49,6 @@ class Team:
 
 
 t = Team()
-t.name = 'celtics'
 t.get_url()
 u = t.url
 

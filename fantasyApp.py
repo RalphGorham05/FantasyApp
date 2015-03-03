@@ -9,6 +9,8 @@ from mechanize import Browser
 #from peewee import *
 import itertools
 from functions import *
+import Team
+import Player
 
 
 
@@ -17,14 +19,13 @@ from functions import *
 pl = raw_input('Enter player name: ')
 
 
-
-city_name = get_Team(pl)
-print pl + ' plays for ' + city_name
-
+#city_name = get_Team(pl)
+#print pl + ' plays for ' + city_name
 
 
 
-'''
+
+
 ##############Schedule section##############
 
 
@@ -86,7 +87,9 @@ for each_game in today_games:
 #for x in range(1,len(today_games) + 1):
     #if city_name in games:
     for g in games:
-        print g
+        t = Team()
+        t.name = g
+        print t.name
 
 
         
@@ -95,7 +98,7 @@ for each_game in today_games:
         #s = get_teamStats(g)
         
 
-'''
+
 
 
 '''
