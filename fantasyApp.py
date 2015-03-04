@@ -91,6 +91,8 @@ for each_game in today_games:
         t = Team()
         t.name = g
         print t.name
+        t.get_stats()
+        print t.stats
 
 
         

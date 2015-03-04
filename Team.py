@@ -8,6 +8,7 @@ class Team:
         self.players = []
         self.stats = []
         self.url = ''
+        self.positionStats = []
 
     def get_url(self):
         for team in urls:
@@ -45,11 +46,46 @@ class Team:
         team_off_efficiency = stats[9]
         team_def_efficiency = stats[10]
 
-        print('\t '.join(map(str, stats)))
+        self.stats.append('\t '.join(map(str, stats)))
 
-'''
+    def get_stats_vs_position(self):
+        each_team = []
+        r = 0
+        q = 1
+        db = {}
+        
+        position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
+
+        position_def = get_HTML_Table(position_url, 'table', 0)
+
+        for r in range(r,len(position_def), 14):
+            self.positionStats.append(position_def[r:r + 14])
+
+        for q in range(q, len(self.positionStats), 13):
+            each_team.append(self.positionStats[q:q+13])
+
+        for p in self.positionStats:
+            y = team_Name(p[0])
+            if self.name in y:
+                print 'yes'
+
+            t = p[0].split()
+            
+            t = t[len(t)-1]
+            db[t] = p
+    
+            #print p
+
+
+
+        
+        
+
+
 t = Team()
-t.get_url()
+t.name = 'celtics'
+t.get_stats_vs_position()
+'''
 u = t.url
 t.get_players()
 
