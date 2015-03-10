@@ -41,6 +41,7 @@ class Team:
         self.stats.append('\t '.join(map(str, team_stats)))
 
     def get_stats_vs_position(self):
+        #draftkings (against PG)
         position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
         pos_stats = []
         team_start = 0
@@ -63,7 +64,7 @@ class Team:
 
 
 t = Team()
-t.name = 'mavericks'
+t.name = 'knicks'
 t.get_stats_vs_position()
 print t.positionStats[2]
 t.get_url()
