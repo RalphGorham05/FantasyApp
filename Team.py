@@ -10,82 +10,63 @@ class Team:
         self.url = ''
         self.positionStats = []
 
+
+    #gets the team's url
     def get_url(self):
-        for team in urls:
-            if self.name == str(team):
-                self.url = urls[str(team)]
+        for page in urls:
+            if self.name == str(page):
+                self.url = urls[str(page)]
+
 
     #gets list of players on team
     def get_players(self):
-
         code = process_Site(self.url)
         playerTable = code.find('table')
         rows = playerTable.findChildren('tr')[2:]
+
         for row in rows:
             data = row.findChildren('td')
             player = data[1].text
             self.players.append(player)
 
-        
 
-
+    #gets team stats
     def get_stats(self):
         team_url = 'http://espn.go.com/nba/hollinger/teamstats/_/sort/defensiveEff/order/false'
-        t_stats = get_HTML_Table(team_url, 'table', 0)
+        stats_table = get_HTML_Table(team_url, 'table', 0)
+        team_row = stats_table.index(self.name)
+        team_stats = stats_table[team_row-1:team_row + 11]
+        del team_stats[1]
 
-        team_row = t_stats.index(self.name)
-        stats = t_stats[team_row-1:team_row + 11]
-        del stats[1]
-
-    
-        #Get the stats that I want
-        team_rank = stats[0]
-        team_pace = stats[1]
-        team_assists = stats[2]
-        team_rebs = stats[6]
-        team_off_efficiency = stats[9]
-        team_def_efficiency = stats[10]
-
-        self.stats.append('\t '.join(map(str, stats)))
+        self.stats.append('\t '.join(map(str, team_stats)))
 
     def get_stats_vs_position(self):
-        each_team = []
-        r = 0
-        q = 1
-        db = {}
-        
         position_url = 'http://www.rotowire.com/daily/nba/defense-vspos.htm?site=DraftKings'
+        pos_stats = []
+        team_start = 0
+
 
         position_def = get_HTML_Table(position_url, 'table', 0)
 
-        for r in range(r,len(position_def), 14):
-            self.positionStats.append(position_def[r:r + 14])
-
-        for q in range(q, len(self.positionStats), 13):
-            each_team.append(self.positionStats[q:q+13])
-
-        for p in self.positionStats:
-            y = team_Name(p[0])
-            if self.name in y:
-                print 'yes'
-
-            t = p[0].split()
-            
-            t = t[len(t)-1]
-            db[t] = p
-    
-            #print p
+        for team_start in range(team_start,len(position_def), 14):
+            pos_stats.append(position_def[team_start:team_start + 14])
 
 
+        for row in pos_stats:
+            teams_col = team_Name(row[0])
 
-        
-        
+
+            if self.name in teams_col:
+                self.positionStats = row
+
+
 
 
 t = Team()
-t.name = 'celtics'
+t.name = 'mavericks'
 t.get_stats_vs_position()
-'''
+print t.positionStats[2]
+t.get_url()
 u = t.url
 t.get_players()
 
@@ -95,4 +76,4 @@ for player in players:
     p = Player(str(player))
     p.get_pID(u)
     print p.name, p.pid
-'''
+
