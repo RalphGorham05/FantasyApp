@@ -11,8 +11,6 @@ class Player:
         self.team = ''
         self.stats = []
 
-
-
     #check to find team
     def get_Team(player):
         tName = ''
@@ -22,12 +20,10 @@ class Player:
             code = process_Site(urls[page])
             playerTable = code.find('table')
 
-
             rows = playerTable.findChildren('tr')[2:]
             for row in rows:
                 data = row.findChildren('td')
                 name = data[1].text
-
 
                 if player == name:
                     tName = city_Name(team)
