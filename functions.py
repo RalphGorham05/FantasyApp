@@ -284,4 +284,3 @@ def get_players(team):
 
     return players
 
-

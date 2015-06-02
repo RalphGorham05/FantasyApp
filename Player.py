@@ -1,6 +1,8 @@
 from mechanize import Browser
 from bs4 import BeautifulSoup
-import functions
+from functions import *
+import Team
+from Team import *
 
 
 
@@ -12,7 +14,7 @@ class Player:
         self.stats = []
 
     #check to find team
-    def get_Team(player):
+    def get_Team(self):
         tName = ''
 
         for team in urls:
@@ -25,7 +27,7 @@ class Player:
                 data = row.findChildren('td')
                 name = data[1].text
 
-                if player == name:
+                if self.name == name:
                     tName = city_Name(team)
 
         self.team = tName
@@ -67,6 +69,22 @@ class Player:
             for n in name:
                 self.stats.append(n)
 
+
+p = Player('Tim Duncan')
+p.get_Team()
+print p.team
+
+s = Team()
+s.name = p.team
+s.get_url()
+s.get_players()
+sp = s.players
+
+for pl in sp:
+    print pl
+#p.get_pID()
+#p.get_Stats()
+#print p.stats
 
 
 

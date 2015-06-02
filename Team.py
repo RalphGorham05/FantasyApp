@@ -1,4 +1,5 @@
 from functions import *
+import Player
 from Player import *
 
 
