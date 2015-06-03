@@ -65,9 +65,9 @@ class Team:
 
 
 t = Team()
-t.name = 'knicks'
+t.name = 'bulls'
 t.get_stats_vs_position()
-print t.positionStats[2]
+#print t.positionStats[2]
 t.get_url()
 u = t.url
 t.get_players()
@@ -77,5 +77,5 @@ players = t.players
 for player in players:
     p = Player(str(player))
     p.get_pID(u)
+    p.get_Stats()
     print p.name, p.pid
-

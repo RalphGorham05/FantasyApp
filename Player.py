@@ -1,8 +1,6 @@
 from mechanize import Browser
 from bs4 import BeautifulSoup
 from functions import *
-import Team
-from Team import *
 
 
 
@@ -69,22 +67,6 @@ class Player:
             for n in name:
                 self.stats.append(n)
 
-
-p = Player('Tim Duncan')
-p.get_Team()
-print p.team
-
-s = Team()
-s.name = p.team
-s.get_url()
-s.get_players()
-sp = s.players
-
-for pl in sp:
-    print pl
-#p.get_pID()
-#p.get_Stats()
-#print p.stats
 
 
 
