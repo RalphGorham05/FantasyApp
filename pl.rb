@@ -6,10 +6,9 @@ br = Mechanize.new
 html = br.get(url)
 
 
-#puts html.at('td')
 
 class Player
-	def init(name)
+	def initialize(name)
 		@name = name
 		@stats = []
 		@pid = ''
